@@ -48,11 +48,12 @@ class SignUp extends Component {
                     }
                 })
             });
-            if (response.status >= 200 && response.status < 300) {
+            let res = response._bodyInit;
+            if (res >= 200 && res < 300) {
                 this.props.navigation.navigate('LoginScreen')
             } else {
                 //Handle error
-                Alert.alert("ERROR", response);
+                Alert.alert("ERROR", res);
             }
         } catch (errors) {
             //Handle error

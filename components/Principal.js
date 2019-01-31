@@ -2,7 +2,7 @@ import React from 'react';
 import { ScrollView, View, StyleSheet, Dimensions } from 'react-native';
 import Task from './Task';
 import Nav from './Nav';
-import AddTaskButton from './AddTaskButton';
+import AddButton from './AddButton';
 
 class Principal extends React.Component {
 
@@ -34,7 +34,7 @@ class Principal extends React.Component {
             <Task key={key} navigation={nav} name={item.name} time={item.time} />
           ))}
         </ScrollView>
-        <AddTaskButton navigation={nav}/>
+        <AddButton navigation={nav}/>
       </View>
     );
   }
@@ -45,9 +45,6 @@ const styles = StyleSheet.create({
     height: Dimensions.get("window").height,
     flex: 1,
     flexDirection: 'column',
-  },
-  tasks:{
-    marginBottom: 60,
   }
 })
 

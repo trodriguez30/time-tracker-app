@@ -40,12 +40,12 @@ class Login extends Component {
                     }
                 })
             });
-            if (response.status >= 200 && response.status < 300) {
+            let res = response._bodyInit;
+            if (res >= 200 && res < 300) {
                 this.props.navigation.navigate('PrincipalScreen')
             } else {
                 //Handle error
-                //Alert.alert("ERROR", response);
-                console.log(response);
+                Alert.alert("ERROR", "Invalid email/password combination");
             }
         } catch (errors) {
             //Handle error

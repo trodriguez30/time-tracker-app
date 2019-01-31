@@ -12,10 +12,10 @@ const styles = StyleSheet.create({
     },
     title: {
         fontSize: 20,
-        color: '#rgba(0, 0, 0, 0.65)',
+        color: '#0b2333',
     },
     buttonText: {
-        color: '#rgba(0, 0, 0, 0.65)',
+        color: '#0b2333',
     },
 })
 
@@ -29,7 +29,7 @@ class Nav extends Component {
                 </NavTitle>
                 <NavGroup>
                     <NavButton
-                        onPress={() => this.props.navigation.navigate('LoginScreen')}
+                        onPress={() => this.props.navigation.navigate('TabsScreen')}
                     >
                         <NavButtonText style={styles.buttonText}>
                             <Ionicons name="md-exit" size={40} />
