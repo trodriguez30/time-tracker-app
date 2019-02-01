@@ -10,31 +10,46 @@ class Principal extends React.Component {
     super(props);
 
     this.state = {
-      data: [
-        { name: "Skptricks", time: "trodrigu@cuc.edu.co" },
-        { name: "Sumit", time: "trodrigu@cuc.edu.co" },
-        { name: "Amit", time: "trodrigu@cuc.edu.co" },
-        { name: "React", time: "trodrigu@cuc.edu.co" },
-        { name: "React Native", time: "trodrigu@cuc.edu.co" },
-        { name: "Java", time: "trodrigu@cuc.edu.co" },
-        { name: "Javascript", time: "trodrigu@cuc.edu.co" },
-      ]
+      data: [],
     };
+  }
+
+  async componentDidMount() {
+    const getUserId = this.props.navigation.getParam('userId', 'NO-ID');
+    this.setState({
+      userId: getUserId,
+    })
+    try {
+      let response = await fetch('http://192.168.1.68:3000/api/v1/users/' + getUserId + '/all_tasks/');
+      let res = JSON.parse(response._bodyInit);
+      for (let i = 0; i < res.length; i++) { 
+        res[i].map((item, index) => {
+          this.setState({
+            data: this.state.data.concat([item])
+          })
+        })
+      }    
+      
+    } catch (errors) {
+      //Handle error
+      console.log(errors);
+    }
   }
 
   render() {
 
     const nav = this.props.navigation;
+    const getUserId = nav.getParam('userId', 'NO-ID');
 
     return (
       <View style={styles.container}>
-        <Nav navigation={nav} />
+        <Nav navigation={nav} userId={getUserId} />
         <ScrollView style={styles.tasks}>
           {this.state.data.map((item, key) => (
-            <Task key={key} navigation={nav} name={item.name} time={item.time} />
+            <Task key={key} navigation={nav} data={[item.title, item.time, item.project_id, getUserId]} id={item.id} />
           ))}
         </ScrollView>
-        <AddButton navigation={nav}/>
+        <AddButton navigation={nav} userId={getUserId} />
       </View>
     );
   }

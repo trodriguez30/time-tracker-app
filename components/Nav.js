@@ -29,7 +29,7 @@ class Nav extends Component {
                 </NavTitle>
                 <NavGroup>
                     <NavButton
-                        onPress={() => this.props.navigation.navigate('TabsScreen')}
+                        onPress={() => this.props.navigation.navigate('NewProjectScreen', {userId: this.props.userId})}
                     >
                         <NavButtonText style={styles.buttonText}>
                             <Ionicons name="md-exit" size={40} />

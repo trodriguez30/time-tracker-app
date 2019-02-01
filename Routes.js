@@ -4,9 +4,8 @@ import SignUp from './components/SignUp';
 import Principal from './components/Principal';
 import Task from './components/Task';
 import NewTask from './components/NewTask';
-import TaskStopwatch from './components/TaskStopwatch';
+import TaskTimer from './components/TaskTimer';
 import NewProject from './components/NewProject';
-import Tabs from './components/Tabs';
 
 const Routes = new createStackNavigator({
     LoginScreen: {
@@ -30,14 +29,11 @@ const Routes = new createStackNavigator({
     NewTaskScreen:{
         screen: NewTask,
     },
-    TaskStopwatchScreen:{
-        screen: TaskStopwatch,
+    TaskTimerScreen:{
+        screen: TaskTimer,
     },
     NewProjectScreen:{
         screen: NewProject,
-    },
-    TabsScreen:{
-        screen: Tabs,
     }
 });
 

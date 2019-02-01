@@ -5,29 +5,11 @@ import { Ionicons } from '@expo/vector-icons';
 
 class Principal extends React.Component {
 
-    /*onPressOptions(navigation) {
-        Alert.alert(
-            'Options',
-            'What do you want to create?',
-            [
-                {
-                    text: 'Cancel',
-                    onPress: () => console.log('OK Pressed')
-                },
-                { text: 'Project', onPress: () => navigation.navigate('NewTaskScreen') },
-                {
-                    text: 'Task', onPress: () => navigation.navigate('NewTaskScreen')
-                },
-            ],
-            { cancelable: false },
-        );
-    }
-    */
-
     render() {
+        const getUserId = this.props.navigation.getParam('userId', 'NO-ID');
         return (
             <TouchableOpacity
-                onPress={() => this.props.navigation.navigate('NewTaskScreen')}
+                onPress={() => this.props.navigation.navigate('NewTaskScreen', {userId: getUserId})}
                 style={styles.touch}>
                 <Ionicons name="md-add" size={50} color='white' />
             </TouchableOpacity>

@@ -6,12 +6,15 @@ class Tasks extends React.Component {
 
     render() {
 
-        const name = 'Task: ' + this.props.name
-        const time = 'Time: ' + this.props.time
+        const name = 'Task: ' + this.props.data[0];
+        const time = 'Time: ' + this.props.data[1];
+        const projectId = this.props.data[2];
+        const userId = this.props.data[3];
+        const taskId = this.props.id;
 
         return (
             <TouchableOpacity style={styles.container}
-            onPress={() => this.props.navigation.navigate('TaskStopwatchScreen')}
+            onPress={() => this.props.navigation.navigate('TaskTimerScreen', {taskId: taskId, projectId: projectId, userId: userId})}
             >
                 <View style={styles.taskBox}>
                 <Ionicons name="ios-checkbox-outline" size={50} style={styles.taskIcon} />

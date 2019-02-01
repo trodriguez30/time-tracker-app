@@ -6,7 +6,8 @@ import {
     View,
     TextInput,
     Dimensions,
-    Button
+    Button,
+    Alert
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -21,48 +22,69 @@ class SignUp extends Component {
         super(props);
 
         this.state = {
-            project: '',
-            description: '',
+            title: '',
+            userId:'',
             errorMessage: null
         }
     }
 
+    async onPressCreateProjectButton() {
+        try {
+            let response = await fetch('http://192.168.1.68:3000/api/v1/users/'+this.state.userId+'/projects/', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    project: {
+                        title: this.state.title,
+                        user_id: this.state.userId,
+                    }
+                })
+            });
+            let res = response._bodyInit;
+            if (res >= 200 && res < 300) {
+                this.props.navigation.navigate('PrincipalScreen')
+            } else {
+                //Handle error
+                Alert.alert("ERROR", res);
+            }
+        } catch (errors) {
+            //Handle error
+            console.log(errors);
+        }
+    }
+
+    async componentDidMount(){
+        const getUserId = this.props.navigation.getParam('userId', 'NO-ID');
+        this.setState({
+            userId: getUserId,
+        })
+    }
+
     render() {
+
         return (
             <KeyboardAvoidingView behavior='padding' style={styles.container}>
                 <Text style={styles.titleForm}>New Project</Text>
                 <View style={styles.formContainer}>
-                    <Text style={styles.titleInput}>PROJECT</Text>
+                    <Text style={styles.titleInput}>PROJECT NAME</Text>
                     <View style={styles.inputContainer}>
                     <Ionicons name="md-clipboard" size={30} style={styles.icon} />
                         <TextInput
                             style={styles.inputText}
-                            onChangeText={project => this.setState({ project })}
-                            value={this.state.project}
+                            onChangeText={title => this.setState({ title })}
+                            value={this.state.title}
                             underlineColorAndroid='transparent'
                             placeholder="Prueba OfferApp"
-                            placeholderTextColor="rgba(11,35,51,0.7)"
-                        />
-                    </View>
-                    <Text style={styles.titleInput}>DESCRIPTION</Text>
-                    <View style={styles.inputContainer}>
-                    <Ionicons name="md-list-box" size={30} style={styles.icon} />
-                        <TextInput
-                            multiline = {true}
-                            numberOfLines = {8}
-                            style={styles.inputText}
-                            onChangeText={description => this.setState({ description })}
-                            value={this.state.description}
-                            underlineColorAndroid='transparent'
-                            placeholder="El objetivo del reto es crear una aplicación que permita llevar un registro del tiempo
-                                        empleado en la realización de una tarea para a un proyecto en específico"
                             placeholderTextColor="rgba(11,35,51,0.7)"
                         />
                     </View>
                 </View>
                 <View style={styles.optionsContainer}>
                     <Button
-                        onPress={() => this.props.navigation.navigate('PrincipalScreen')}
+                        onPress={this.onPressCreateProjectButton.bind(this)}
                         title="Create project"
                         color="#0b2333"
                     ></Button>

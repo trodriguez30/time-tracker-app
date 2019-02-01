@@ -41,8 +41,9 @@ class Login extends Component {
                 })
             });
             let res = response._bodyInit;
-            if (res >= 200 && res < 300) {
-                this.props.navigation.navigate('PrincipalScreen')
+            console.log(res)
+            if (res != 422) {
+                this.props.navigation.navigate('PrincipalScreen', {userId: res});
             } else {
                 //Handle error
                 Alert.alert("ERROR", "Invalid email/password combination");
