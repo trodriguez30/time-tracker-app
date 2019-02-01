@@ -28,6 +28,7 @@ class TaskTimer extends Component {
             isRunning: false,
             taskId: '',
             projectTitle: '',
+            data: [],
         }
     }
 
@@ -35,7 +36,9 @@ class TaskTimer extends Component {
         const getUserId = this.props.navigation.getParam('userId', 'NO-ID');
         const getProjectId = this.props.navigation.getParam('projectId', 'NO-ID');
         const getTaskId = this.props.navigation.getParam('taskId', 'NO-ID');
-
+        this.setState({
+            data: [getUserId, getProjectId, getTaskId],
+        })
         try {
             let responseTask = await fetch('http://192.168.1.68:3000/api/v1/users/' + getUserId + '/projects/' + getProjectId + '/tasks/' + getTaskId);
             let resTask = JSON.parse(responseTask._bodyInit);
@@ -67,7 +70,7 @@ class TaskTimer extends Component {
         }
     }
 
-    onPressCreateTaskButton() {
+    async onPressCreateTaskButton() {
 
         let time, s, m, h;
         time = this.state.time.split(':');
@@ -78,14 +81,40 @@ class TaskTimer extends Component {
             clearInterval(this.interval);
             this.setState({
                 isRunning: false,
-            })
-            return;
+            });
+            try {
+                let response = await fetch('http://192.168.1.68:3000/api/v1/users/' + this.state.data[0] + '/projects/' + this.state.data[1] + '/tasks/' + this.state.data[2], {
+                    method: 'PATCH',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        task: {
+                            title: this.state.task,
+                            time: this.state.time,
+                            is_running: false,
+                            project_id: this.state.projectId,
+                        }
+                    })
+                });
+                let res = response._bodyInit;
+                if (res >= 200 && res < 300) {
+                    return;
+                } else {
+                    //Handle error
+                    Alert.alert("ERROR", res);
+                }
+            } catch (errors) {
+                //Handle error
+                console.log(errors);
+            }
         }
 
         this.setState({
             isRunning: true,
         });
-        
+
         this.interval = setInterval(() => {
             if (s < 60) {
                 s++;
