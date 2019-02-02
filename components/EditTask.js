@@ -10,6 +10,7 @@ import {
     Alert,
     Picker,
 } from 'react-native';
+import GLOBAL from '../IpConfig';
 import { Ionicons } from '@expo/vector-icons';
 
 
@@ -42,7 +43,7 @@ class EditTask extends Component {
             taskId: getId[2],
         })
         try {
-            let responseTask = await fetch('http://192.168.1.68:3000/api/v1/users/' + getId[0] + '/projects/' + getId[1] + '/tasks/' + getId[2]);
+            let responseTask = await fetch('http://'+GLOBAL.IP+':3000/api/v1/users/' + getId[0] + '/projects/' + getId[1] + '/tasks/' + getId[2]);
             let resTask = JSON.parse(responseTask._bodyInit);
             if (resTask != 422) {
                 this.setState({
@@ -54,7 +55,7 @@ class EditTask extends Component {
                 Alert.alert("Error", "Try Again, please");
             }
             console.log(this.state.time);
-            let responseProject = await fetch('http://192.168.1.68:3000/api/v1/users/' + getId[0] + '/projects/');
+            let responseProject = await fetch('http://'+GLOBAL.IP+':3000/api/v1/users/' + getId[0] + '/projects/');
             let resProject = JSON.parse(responseProject._bodyInit);
             if (resProject != 422) {
                 this.setState({
@@ -72,7 +73,7 @@ class EditTask extends Component {
 
     async onPressUpdateTaskButton() {
         try {
-            let response = await fetch('http://192.168.1.68:3000/api/v1/users/' + this.state.userId + '/projects/' + this.state.projectId + '/tasks/'+this.state.taskId, {
+            let response = await fetch('http://'+GLOBAL.IP+':3000/api/v1/users/' + this.state.userId + '/projects/' + this.state.projectId + '/tasks/'+this.state.taskId, {
                 method: 'PATCH',
                 headers: {
                     'Accept': 'application/json',

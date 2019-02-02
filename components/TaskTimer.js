@@ -6,10 +6,10 @@ import {
     View,
     TextInput,
     Dimensions,
-    Button,
     Alert,
     TouchableOpacity,
 } from 'react-native';
+import GLOBAL from '../IpConfig';
 import { Ionicons } from '@expo/vector-icons';
 
 
@@ -41,7 +41,7 @@ class TaskTimer extends Component {
             data: [getUserId, getProjectId, getTaskId],
         })
         try {
-            let responseTask = await fetch('http://192.168.1.68:3000/api/v1/users/' + getUserId + '/projects/' + getProjectId + '/tasks/' + getTaskId);
+            let responseTask = await fetch('http://'+GLOBAL.IP+':3000/api/v1/users/' + getUserId + '/projects/' + getProjectId + '/tasks/' + getTaskId);
             let resTask = JSON.parse(responseTask._bodyInit);
             if (resTask != 422) {
                 this.setState({
@@ -55,7 +55,7 @@ class TaskTimer extends Component {
                 //Handle error
                 Alert.alert("Error", "Try Again, please");
             }
-            let responseProject = await fetch('http://192.168.1.68:3000/api/v1/users/' + getUserId + '/projects/' + getProjectId);
+            let responseProject = await fetch('http://'+GLOBAL.IP+':3000/api/v1/users/' + getUserId + '/projects/' + getProjectId);
             let resProject = JSON.parse(responseProject._bodyInit);
             if (resProject != 422) {
                 this.setState({
@@ -84,7 +84,7 @@ class TaskTimer extends Component {
                 isRunning: false,
             });
             try {
-                let response = await fetch('http://192.168.1.68:3000/api/v1/users/' + this.state.data[0] + '/projects/' + this.state.data[1] + '/tasks/' + this.state.data[2], {
+                let response = await fetch('http://'+GLOBAL.IP+':3000/api/v1/users/' + this.state.data[0] + '/projects/' + this.state.data[1] + '/tasks/' + this.state.data[2], {
                     method: 'PATCH',
                     headers: {
                         'Accept': 'application/json',
@@ -153,7 +153,7 @@ class TaskTimer extends Component {
 
     async _onPressDeleteTask() {
         try {
-            let response = await fetch('http://192.168.1.68:3000/api/v1/users/' + this.state.data[0] + '/projects/' + this.state.data[1] + '/tasks/' + this.state.data[2], {
+            let response = await fetch('http://'+GLOBAL.IP+':3000/api/v1/users/' + this.state.data[0] + '/projects/' + this.state.data[1] + '/tasks/' + this.state.data[2], {
                 method: 'DELETE',
             });
             let res = JSON.parse(response._bodyInit);

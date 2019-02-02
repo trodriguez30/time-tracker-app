@@ -3,13 +3,13 @@ import {
     StyleSheet,
     KeyboardAvoidingView,
     View,
-    Image,
     TextInput,
     Dimensions,
     Button,
     Alert
 } from 'react-native';
 import Logo from "./Logo";
+import GLOBAL from '../IpConfig';
 import { Ionicons } from '@expo/vector-icons';
 
 
@@ -27,7 +27,7 @@ class Login extends Component {
 
     async onPressLogInButton() {
         try {
-            let response = await fetch('http://192.168.1.68:3000/api/v1/login', {
+            let response = await fetch('http://'+GLOBAL.IP+':3000/api/v1/login', {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',

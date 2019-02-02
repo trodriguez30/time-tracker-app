@@ -10,6 +10,7 @@ import {
     Alert,
     Picker,
 } from 'react-native';
+import GLOBAL from '../IpConfig'
 import { Ionicons } from '@expo/vector-icons';
 
 
@@ -39,7 +40,7 @@ class NewTask extends Component {
             userId: getUserId,
         })
         try {
-            let response = await fetch('http://192.168.1.68:3000/api/v1/users/' + getUserId + '/projects/');
+            let response = await fetch('http://'+GLOBAL.IP+':3000/api/v1/users/' + getUserId + '/projects/');
             let res = JSON.parse(response._bodyInit);
             if (res != 422) {
                 this.setState({
@@ -57,7 +58,7 @@ class NewTask extends Component {
 
     async onPressCreateTaskButton() {
         try {
-            let response = await fetch('http://192.168.1.68:3000/api/v1/users/' + this.state.userId + '/projects/'+this.state.projectId+'/tasks/', {
+            let response = await fetch('http://'+GLOBAL.IP+':3000/api/v1/users/' + this.state.userId + '/projects/'+this.state.projectId+'/tasks/', {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
@@ -86,6 +87,9 @@ class NewTask extends Component {
     }
 
     render() {
+        if(this.state.projects==[]){
+            Alert.alert("Alert", "you don't have any project created");
+        }
         return (
             <KeyboardAvoidingView behavior='padding' style={styles.container}>
                 <Text style={styles.titleForm}>New Task</Text>

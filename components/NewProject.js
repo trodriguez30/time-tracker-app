@@ -9,6 +9,7 @@ import {
     Button,
     Alert
 } from 'react-native';
+import GLOBAL from '../IpConfig';
 import { Ionicons } from '@expo/vector-icons';
 
 
@@ -30,7 +31,7 @@ class SignUp extends Component {
 
     async onPressCreateProjectButton() {
         try {
-            let response = await fetch('http://192.168.1.68:3000/api/v1/users/'+this.state.userId+'/projects/', {
+            let response = await fetch('http://'+GLOBAL.IP+':3000/api/v1/users/'+this.state.userId+'/projects/', {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',

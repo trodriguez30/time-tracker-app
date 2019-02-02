@@ -9,6 +9,7 @@ import {
     Button,
     Alert
 } from 'react-native';
+import GLOBAL from '../IpConfig';
 import { Ionicons } from '@expo/vector-icons';
 
 
@@ -28,12 +29,13 @@ class SignUp extends Component {
             username: '',
             password: '',
             password_confirmation: '',
+            errors: [],
         }
     }
 
     async onPressSignUpButton() {
         try {
-            let response = await fetch('http://192.168.1.68:3000/api/v1/users', {
+            let response = await fetch('http://'+GLOBAL.IP+':3000/api/v1/users', {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
@@ -53,7 +55,8 @@ class SignUp extends Component {
                 this.props.navigation.navigate('LoginScreen')
             } else {
                 //Handle error
-                Alert.alert("ERROR", res);
+                let e = JSON.parse(res);
+                Alert.alert("Erros", e.errors.join('\n'));
             }
         } catch (errors) {
             //Handle error

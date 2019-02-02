@@ -3,6 +3,7 @@ import { ScrollView, View, StyleSheet, Dimensions, RefreshControl } from 'react-
 import Task from './Task';
 import Nav from './Nav';
 import AddButton from './AddButton';
+import GLOBAL from '../IpConfig';
 
 class Principal extends React.Component {
 
@@ -30,7 +31,7 @@ class Principal extends React.Component {
       data: [],
     })
     try {
-      let response = await fetch('http://192.168.1.68:3000/api/v1/users/' + getUserId + '/all_tasks/');
+      let response = await fetch('http://'+GLOBAL.IP+':3000/api/v1/users/' + getUserId + '/all_tasks/');
       let res = JSON.parse(response._bodyInit);
       for (let i = 0; i < res.length; i++) {
         res[i].map((item, index) => {
