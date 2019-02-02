@@ -8,6 +8,7 @@ import {
     Dimensions,
     Button,
     Alert,
+    TouchableOpacity,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -70,7 +71,7 @@ class TaskTimer extends Component {
         }
     }
 
-    async onPressCreateTaskButton() {
+    async _onPressStartStopTaskButton() {
 
         let time, s, m, h;
         time = this.state.time.split(':');
@@ -139,15 +140,34 @@ class TaskTimer extends Component {
                     h = "0" + h;
                 }
             }
-            this.updateTime(h, m, s)
+            this._updateTime(h, m, s)
         }, 1000);
     }
 
-    updateTime(h, m, s) {
+    _updateTime(h, m, s) {
         crono = "" + h + ":" + m + ":" + s + "";
         this.setState({
             time: crono,
         })
+    }
+
+    async _onPressDeleteTask() {
+        try {
+            let response = await fetch('http://192.168.1.68:3000/api/v1/users/' + this.state.data[0] + '/projects/' + this.state.data[1] + '/tasks/' + this.state.data[2], {
+                method: 'DELETE',
+            });
+            let res = JSON.parse(response._bodyInit);
+            if (res != 422) {
+                Alert.alert("Delete", "successfully deleted task");
+                this.props.navigation.goBack();
+            } else {
+                //Handle error
+                Alert.alert("Error", "Try Again, please");
+            }
+        } catch (errors) {
+            //Handle error
+            console.log(errors);
+        }
     }
 
     render() {
@@ -198,12 +218,27 @@ class TaskTimer extends Component {
                         />
                     </View>
                 </View>
+                <View style={styles.timerContainer}>
+                    <TouchableOpacity
+                        onPress={this._onPressStartStopTaskButton.bind(this)}
+                        style={styles.timerButton}
+                    >
+                        <Text style={styles.timerText}>{nameButton}</Text>
+                    </TouchableOpacity>
+                </View>
                 <View style={styles.optionsContainer}>
-                    <Button
-                        onPress={this.onPressCreateTaskButton.bind(this)}
-                        title={nameButton}
-                        color="#0b2333"
-                    ></Button>
+                    <TouchableOpacity
+                        onPress={() => this.props.navigation.navigate('EditTaskScreen', {dataId: this.state.data})}
+                        style={[styles.optionsButton, styles.edit]}
+                    >
+                        <Text style={styles.optionsText}>Edit</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={this._onPressDeleteTask.bind(this)}
+                        style={[styles.optionsButton, styles.delete]}
+                    >
+                        <Text style={styles.optionsText}>Delete</Text>
+                    </TouchableOpacity>
                 </View>
             </ScrollView>
         );
@@ -241,12 +276,49 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         fontSize: 15,
     },
-    optionsContainer: {
-        paddingVertical: 20,
-    },
     stopWatch: {
         textAlign: 'center',
         fontSize: 40,
+    },
+    timerContainer: {
+        width: Dimensions.get('window').width,
+        paddingVertical: 10,
+        flex: 1,
+    },
+    timerButton: {
+        backgroundColor: '#0b2333',
+        height: 60,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    timerText: {
+        color: 'white',
+        fontWeight: 'bold',
+    },
+    optionsContainer: {
+        paddingTop: 10,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginBottom: 40,
+        marginTop: 20,
+        flex: 1,
+    },
+    optionsButton: {
+        width: (Dimensions.get('window').width) / 3,
+        backgroundColor: '#0b2333',
+        height: 40,
+        justifyContent: 'center',
+    },
+    optionsText: {
+        textAlign: 'center',
+        color: 'white',
+        fontWeight: 'bold',
+    },
+    edit: {
+        backgroundColor: '#185F00',
+    },
+    delete: {
+        backgroundColor: '#A50701',
     }
 });
 

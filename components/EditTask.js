@@ -13,7 +13,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 
 
-class NewTask extends Component {
+class EditTask extends Component {
     static navigationOptions = {
         headerStyle: { backgroundColor: '#f8d368' },
         title: 'Time Tracker App',
@@ -23,27 +23,42 @@ class NewTask extends Component {
         super(props);
 
         this.state = {
-            task: '',
+            taskId: '',
             projectId: '',
-            time: '00:00:00',
+            title: '',
+            time: '',
             isRunning: false,
             userId: '',
             projects: [],
-            errorMessage: null
+            dataId: [],
         }
     }
 
     async componentDidMount() {
-        const getUserId = this.props.navigation.getParam('userId', 'NO-ID');
+        const getId = this.props.navigation.getParam('dataId', 'NO-ID');
         this.setState({
-            userId: getUserId,
+            userId: getId[0],
+            projectId: getId[1],
+            taskId: getId[2],
         })
         try {
-            let response = await fetch('http://192.168.1.68:3000/api/v1/users/' + getUserId + '/projects/');
-            let res = JSON.parse(response._bodyInit);
-            if (res != 422) {
+            let responseTask = await fetch('http://192.168.1.68:3000/api/v1/users/' + getId[0] + '/projects/' + getId[1] + '/tasks/' + getId[2]);
+            let resTask = JSON.parse(responseTask._bodyInit);
+            if (resTask != 422) {
                 this.setState({
-                    projects: res,
+                    title: resTask.title,
+                    time: resTask.time,
+                });
+            } else {
+                //Handle error
+                Alert.alert("Error", "Try Again, please");
+            }
+            console.log(this.state.time);
+            let responseProject = await fetch('http://192.168.1.68:3000/api/v1/users/' + getId[0] + '/projects/');
+            let resProject = JSON.parse(responseProject._bodyInit);
+            if (resProject != 422) {
+                this.setState({
+                    projects: resProject,
                 });
             } else {
                 //Handle error
@@ -55,19 +70,19 @@ class NewTask extends Component {
         }
     }
 
-    async onPressCreateTaskButton() {
+    async onPressUpdateTaskButton() {
         try {
-            let response = await fetch('http://192.168.1.68:3000/api/v1/users/' + this.state.userId + '/projects/'+this.state.projectId+'/tasks/', {
-                method: 'POST',
+            let response = await fetch('http://192.168.1.68:3000/api/v1/users/' + this.state.userId + '/projects/' + this.state.projectId + '/tasks/'+this.state.taskId, {
+                method: 'PATCH',
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
                     task: {
-                        title: this.state.task,
+                        title: this.state.title,
                         time: this.state.time,
-                        is_running: this.state.isRunning,
+                        is_running: false,
                         project_id: this.state.projectId,
                     }
                 })
@@ -95,8 +110,8 @@ class NewTask extends Component {
                         <Ionicons name="md-checkbox-outline" size={30} style={styles.icon} />
                         <TextInput
                             style={styles.inputText}
-                            onChangeText={task => this.setState({ task })}
-                            value={this.state.task}
+                            onChangeText={title => this.setState({ title })}
+                            value={this.state.title}
                             underlineColorAndroid='transparent'
                             placeholder="Login"
                             placeholderTextColor="rgba(11,35,51,0.7)"
@@ -115,8 +130,8 @@ class NewTask extends Component {
                 </View>
                 <View style={styles.optionsContainer}>
                     <Button
-                        onPress={this.onPressCreateTaskButton.bind(this)}
-                        title="Create task"
+                        onPress={this.onPressUpdateTaskButton.bind(this)}
+                        title="Update task"
                         color="#0b2333"
                     ></Button>
                 </View>
@@ -161,4 +176,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default NewTask;
+export default EditTask;

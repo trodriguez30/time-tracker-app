@@ -6,6 +6,7 @@ import Task from './components/Task';
 import NewTask from './components/NewTask';
 import TaskTimer from './components/TaskTimer';
 import NewProject from './components/NewProject';
+import EditTask from './components/EditTask';
 
 const Routes = new createStackNavigator({
     LoginScreen: {
@@ -34,6 +35,9 @@ const Routes = new createStackNavigator({
     },
     NewProjectScreen:{
         screen: NewProject,
+    },
+    EditTaskScreen:{
+        screen: EditTask,
     }
 });
 
