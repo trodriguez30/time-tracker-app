@@ -49,7 +49,8 @@ class SignUp extends Component {
                 this.props.navigation.navigate('PrincipalScreen')
             } else {
                 //Handle error
-                Alert.alert("ERROR", res);
+                let e = JSON.parse(res);
+                Alert.alert("Erros", e.errors.join('\n'));
             }
         } catch (errors) {
             //Handle error

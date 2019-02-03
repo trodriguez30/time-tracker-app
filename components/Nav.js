@@ -19,7 +19,14 @@ const styles = StyleSheet.create({
     },
 })
 
+
+
 class Nav extends Component {
+
+    async onPressLogOutButton() {
+        this.props.navigation.navigate('LoginScreen');
+    }
+    
     render() {
         return (
             <NavBar style={styles}>
@@ -29,7 +36,7 @@ class Nav extends Component {
                 </NavTitle>
                 <NavGroup>
                     <NavButton
-                        onPress={() => this.props.navigation.navigate('NewProjectScreen', {userId: this.props.userId})}
+                        onPress={this.onPressLogOutButton.bind(this)}
                     >
                         <NavButtonText style={styles.buttonText}>
                             <Ionicons name="md-exit" size={40} />

@@ -72,6 +72,10 @@ class EditTask extends Component {
     }
 
     async onPressUpdateTaskButton() {
+        if(this.state.projectId==''){
+            Alert.alert('Alert', 'Please, select a project');
+            return;
+        }
         try {
             let response = await fetch('http://'+GLOBAL.IP+':3000/api/v1/users/' + this.state.userId + '/projects/' + this.state.projectId + '/tasks/'+this.state.taskId, {
                 method: 'PATCH',
@@ -93,7 +97,8 @@ class EditTask extends Component {
                 this.props.navigation.navigate('PrincipalScreen')
             } else {
                 //Handle error
-                Alert.alert("ERROR", res);
+                let e = JSON.parse(res);
+                Alert.alert("Errors", e.errors.join('\n'));
             }
         } catch (errors) {
             //Handle error
@@ -104,7 +109,7 @@ class EditTask extends Component {
     render() {
         return (
             <KeyboardAvoidingView behavior='padding' style={styles.container}>
-                <Text style={styles.titleForm}>New Task</Text>
+                <Text style={styles.titleForm}>Edit Task</Text>
                 <View style={styles.formContainer}>
                     <Text style={styles.titleInput}>TASK</Text>
                     <View style={styles.inputContainer}>
@@ -125,7 +130,6 @@ class EditTask extends Component {
                         <Picker.Item label="Project..." value="" />
                         {this.state.projects.map((item, index) => {
                             return (< Picker.Item label={item.title} value={item.id} key={index} />);
-
                         })}
                     </Picker>
                 </View>

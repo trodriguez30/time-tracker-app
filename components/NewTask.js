@@ -57,6 +57,10 @@ class NewTask extends Component {
     }
 
     async onPressCreateTaskButton() {
+        if(this.state.projectId==''){
+            Alert.alert('Alert', 'Please, select a project');
+            return;
+        }
         try {
             let response = await fetch('http://'+GLOBAL.IP+':3000/api/v1/users/' + this.state.userId + '/projects/'+this.state.projectId+'/tasks/', {
                 method: 'POST',
@@ -75,10 +79,12 @@ class NewTask extends Component {
             });
             let res = response._bodyInit;
             if (res >= 200 && res < 300) {
-                this.props.navigation.navigate('PrincipalScreen')
+                Alert.alert('Important','When you create, edit or delete a task you must update the list by sliding down to notice the changes');
+                this.props.navigation.goBack();
             } else {
                 //Handle error
-                Alert.alert("ERROR", res);
+                let e = JSON.parse(res);
+                Alert.alert("Errors", e.errors.join('\n'));
             }
         } catch (errors) {
             //Handle error

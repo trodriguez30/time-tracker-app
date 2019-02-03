@@ -1,8 +1,9 @@
 import React from 'react';
-import { ScrollView, View, StyleSheet, Dimensions, RefreshControl } from 'react-native';
+import { ScrollView, View, StyleSheet, Dimensions, RefreshControl, Alert, TouchableOpacity, Text } from 'react-native';
 import Task from './Task';
 import Nav from './Nav';
 import AddButton from './AddButton';
+import { Ionicons } from '@expo/vector-icons';
 import GLOBAL from '../IpConfig';
 
 class Principal extends React.Component {
@@ -53,6 +54,7 @@ class Principal extends React.Component {
     const nav = this.props.navigation;
     const getUserId = nav.getParam('userId', 'NO-ID');
 
+
     return (
       <View style={styles.container}>
         <Nav navigation={nav} userId={getUserId} />
@@ -80,6 +82,9 @@ const styles = StyleSheet.create({
     height: Dimensions.get("window").height,
     flex: 1,
     flexDirection: 'column',
+  },
+  tasks:{
+    marginBottom: 60,
   }
 })
 

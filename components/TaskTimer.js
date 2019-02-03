@@ -104,7 +104,8 @@ class TaskTimer extends Component {
                     return;
                 } else {
                     //Handle error
-                    Alert.alert("ERROR", res);
+                    let e = JSON.parse(res);
+                    Alert.alert("Errors", e.errors.join('\n'));
                 }
             } catch (errors) {
                 //Handle error

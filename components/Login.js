@@ -43,6 +43,8 @@ class Login extends Component {
             let res = response._bodyInit;
             console.log(res)
             if (res != 422) {
+                this.userInput.clear()
+                this.passwordInput.clear()
                 this.props.navigation.navigate('PrincipalScreen', {userId: res});
             } else {
                 //Handle error
